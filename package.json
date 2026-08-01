@@ -1,0 +1,75 @@
+{
+    "name": "langsys-js-nestjs",
+    "version": "0.1.0",
+    "description": "NestJS binding for the Langsys translation SDK — realtime continuous translations with automatic token discovery for multi-locale Node servers: module, injectable translator, and locale-detection middleware.",
+    "author": "Langsys",
+    "license": "MIT",
+    "homepage": "https://github.com/langsys/langsys-js-nestjs",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/langsys/langsys-js-nestjs.git"
+    },
+    "bugs": {
+        "url": "https://github.com/langsys/langsys-js-nestjs/issues"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist",
+        "README.md",
+        "CHANGELOG.md",
+        "LICENSE"
+    ],
+    "sideEffects": false,
+    "scripts": {
+        "build": "tsup",
+        "build:watch": "tsup --watch",
+        "typecheck": "tsc --noEmit",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "lint": "prettier --check .",
+        "format": "prettier --write .",
+        "prepublishOnly": "npm run build"
+    },
+    "keywords": [
+        "i18n",
+        "l10n",
+        "nestjs",
+        "nest",
+        "server",
+        "ssr",
+        "language",
+        "localization",
+        "internationalization",
+        "translation",
+        "langsys",
+        "sdk"
+    ],
+    "peerDependencies": {
+        "@nestjs/common": "^10.0.0 || ^11.0.0"
+    },
+    "dependencies": {
+        "langsys-js-typescript": "^0.4.1"
+    },
+    "devDependencies": {
+        "@nestjs/common": "^10.4.0",
+        "@types/node": "^20.19.43",
+        "prettier": "^3.3.0",
+        "reflect-metadata": "^0.2.2",
+        "rxjs": "^7.8.0",
+        "tsup": "^8.4.0",
+        "typescript": "^5.8.3",
+        "vitest": "^3.2.0"
+    }
+}
