@@ -22,9 +22,13 @@ let translationsOk = true;
 const CATALOGS: Record<string, Record<string, Record<string, string>>> = {
     'es-ES': {
         Greetings: { 'Hello, {name}!': '¡Hola, {name}!' },
+        // Written flat in the source; the plural and gender branches are what Langsys generates.
         Inbox: {
-            'You have {count, plural, one {# new message} other {# new messages}}.':
-                'Tienes {count, plural, one {# mensaje nuevo} other {# mensajes nuevos}}.',
+            'You have {count} new messages.': 'Tienes {count, plural, one {# mensaje nuevo} other {# mensajes nuevos}}.',
+        },
+        Team: {
+            '{username} has been invited':
+                '{username_gender, select, male {{username} ha sido invitado} female {{username} ha sido invitada} other {{username} ha sido invitade}}',
         },
     },
     'fr-FR': {
@@ -114,9 +118,18 @@ describe('multi-locale catalog cache', () => {
     it('resolves ICU plurals in the bound locale', async () => {
         const server = makeServer();
         const t = await server.translator('es-ES');
-        const phrase = 'You have {count, plural, one {# new message} other {# new messages}}.';
+        const phrase = 'You have {count} new messages.';
         expect(t(phrase, 'Inbox', { count: 1 })).toBe('Tienes 1 mensaje nuevo.');
         expect(t(phrase, 'Inbox', { count: 3 })).toBe('Tienes 3 mensajes nuevos.');
+    });
+
+    it('resolves the gender branch Langsys adds, and takes "other" when the argument is missing', async () => {
+        const server = makeServer();
+        const t = await server.translator('es-ES');
+        expect(t('{username} has been invited', 'Team', { username: 'Sarah', username_gender: 'female' })).toBe('Sarah ha sido invitada');
+        // The app never wrote a gender argument: the locale grew one. Missing, it must read
+        // as the neutral branch, never as raw ICU (langsys-js-typescript 0.6.4).
+        expect(t('{username} has been invited', 'Team', { username: 'Sarah' })).toBe('Sarah ha sido invitade');
     });
 });
 
